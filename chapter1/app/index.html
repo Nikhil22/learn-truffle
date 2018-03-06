@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Truffle - Mini Dapp</title>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="https://unpkg.com/tachyons@4.9.1/css/tachyons.min.css"/>
+  <script src="./app.js"></script>
+</head>
+<body class="open-sans">
+  <div class="absolute right-1 top-1 tc pt4 left f5 pb3 bg-black-80 w4 h4 shadow-2 br4 white">You have
+    <div class="f3 mt3">
+      <span id="balance" class="b"></span>
+      ETH
+    </div>
+  </div>
+  <div class="tc f2 mb5 near-black">Reward a friend for their hard work - send them Ether</div>
+  <div class="pa4 mt5 bg-white shadow-1 br2 tc">
+    <div class="f3 dark-green">Send Ether</div>
+    <form class="pt3 pb4 ph5-l black-60">
+      <fieldset class="ba b--transparent ph0 mh0">
+        <div class="mt3 ph3 pa0-l">
+          <input
+            class="pa3 input-reset ba b--black-30 br2 bg-white-smoke w-100"
+            type="number"
+            id="amount"
+            placeholder="Amount">
+        </div>
+        <div class="mt3 ph3 pa0-l">
+          <input
+            class="pa3 input-reset ba b--black-30 br2 bg-white-smoke w-100"
+            type="text"
+            id="receiver"
+            placeholder="Address">
+        </div>
+      </fieldset>
+    </form>
+    <button
+      class="white pa3 ph4 bg-green br2 f3 b pointer"
+      onclick="App.reward()"
+      id="send"
+      >&#8594;
+    </button>
+  </div>
+  <div id="status" class="pt4"></div>
+</body>
+</html>
