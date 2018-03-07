@@ -10,20 +10,19 @@ import organization_artifacts from '../../build/contracts/Organization.json'
 
 // Organization is our usable abstraction, which we'll use through the code below.
 var Organization = contract(organization_artifacts);
-
-// The following code is simple to show off interacting with your contracts.
-// As your needs grow you will likely need to change its form and structure.
-// For application bootstrapping, check out window.addEventListener below.
 var accounts;
 var account;
 
 window.App = {
   start: function() {
     var self = this;
-
     // Bootstrap the Organization abstraction for Use.
     Organization.setProvider(web3.currentProvider);
+    this.getAccounts();
+  },
 
+  getAccounts: function () {
+    var self = this;
     // Get the initial account balance so it can be displayed.
     web3.eth.getAccounts(function(err, accs) {
       if (err != null) {
