@@ -6,6 +6,18 @@ This repository contains all code, grouped by chapter, for the book of the above
 - There is a folder for each chapter in the book.
 - Inside each folder, there is a <strong>README.md</strong> file that provides detail about the particular chapter
 
+## How to Use
+1. Clone this repository
+2. Navigate to the chosen chapter. (i.e `cd chapter1)`
+4. `npm install truffle -g`
+3. `npm install`
+4. In a new terminal tab/window:
+	1. `truffle develop`
+	2. `compile`
+	3. `migrate`
+5. `npm run dev`
+6. Navigate to `http://localhost:8080/#/`
+
 ## Technologies Used
 - Truffle
 - JavaScript (Angular, React, Vue, Node)
