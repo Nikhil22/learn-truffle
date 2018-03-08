@@ -5,7 +5,7 @@ This chapter will introduce the reader to Truffle, and illustrate why it is used
 ## The Final Product
 
 <p align="center">		
-  <img src="images/chapter1/final-product.png">
+  <img src="/images/chapter1/final-product.png">
  </p>
 
 ## What Will You Learn?
