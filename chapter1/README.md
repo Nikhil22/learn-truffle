@@ -1,6 +1,6 @@
 # Chapter 1 - Truffle for Decentralized Applications
 
-This chapter will introduce the reader to Truffle, and illustrate why it is used and how to works from a high level. Moreover, this chapter will demonstrate how JavaScript, Solidity, and Web3 interact together inside the basic Truffle environment, and how Truffle gives the developer control over all three said aspects of a decentralized application. Lastly, you the reader build a small project in Truffle and understand its power.
+This chapter will introduce the reader to Truffle, and illustrate why it is used and how to works from a high level. Moreover, this chapter will demonstrate how JavaScript, Solidity, and Web3 interact together inside the basic Truffle environment, and how Truffle gives the developer control over all three said aspects of a decentralized application. Lastly, the reader will build a small project in Truffle and understand its power.
 
 ## The Final Product
 
