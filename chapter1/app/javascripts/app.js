@@ -1,101 +1,80 @@
-// Import the page's CSS. Webpack will know what to do with it.
-import "../stylesheets/app.css";
-
-// Import libraries we need.
 import { default as Web3} from 'web3';
 import { default as contract } from 'truffle-contract'
+import taskMasterArtifacts from '../../build/contracts/TaskMaster.json'
 
-// Import our contract artifacts and turn them into usable abstractions.
-import organization_artifacts from '../../build/contracts/Organization.json'
+var TaskMaster = contract(taskMasterArtifacts);
+var ownerAccount;
 
-// Organization is our usable abstraction, which we'll use through the code below.
-var Organization = contract(organization_artifacts);
-var accounts;
-var account;
+window.TaskMasterApp = {
+  setWeb3Provider: function() {
+    TaskMaster.setProvider(web3.currentProvider);
+  },
 
-window.App = {
-  start: function() {
+  updateTransactionStatus: function(statusMessage) {
+    document.getElementById("transactionStatus").innerHTML = statusMessage;
+  },
+
+  refreshAccountBalance: function() {
     var self = this;
-    // Bootstrap the Organization abstraction for Use.
-    Organization.setProvider(web3.currentProvider);
-    this.getAccounts();
+
+    TaskMaster.deployed()
+      .then(function(taskMasterInstance) {
+        return taskMasterInstance.getBalance.call(ownerAccount, {
+          from: ownerAccount
+        });
+      }).then(function(value) {
+        document.getElementById("accountBalance").innerHTML = value.valueOf();
+        document.getElementById("accountBalance").style.color = "white";
+      }).catch(function(e) {
+        console.log(e);
+        self.updateTransactionStatus("Error getting account balance; see console.");
+      });
   },
 
   getAccounts: function () {
     var self = this;
-    // Get the initial account balance so it can be displayed.
-    web3.eth.getAccounts(function(err, accs) {
-      if (err != null) {
-        alert("There was an error fetching your accounts.");
+    web3.eth.getAccounts(function(error, accounts) {
+      if (error != null) {
+        alert("Sorry, something went wrong. We couldn't fetch your accounts.");
         return;
       }
 
-      if (accs.length == 0) {
-        alert("Couldn't get any accounts! Make sure your Ethereum client is configured correctly.");
+      if (!accounts.length) {
+        alert("Sorry, no errors, but we couldn't get any accounts - Make sure your Ethereum client is configured correctly.");
         return;
       }
 
-      accounts = accs;
-      account = accounts[0];
-
-      self.refreshBalance();
+      ownerAccount = accounts[0];
+      self.refreshAccountBalance();
     });
   },
 
-  setStatus: function(message) {
-    var status = document.getElementById("status");
-    status.innerHTML = message;
-  },
-
-  refreshBalance: function() {
+  rewardDoer: function() {
     var self = this;
 
-    var organization;
-    Organization.deployed().then(function(instance) {
-      organization = instance;
-      return organization.getBalance.call(account, {from: account});
-    }).then(function(value) {
-      document.getElementById("balance").innerHTML = value.valueOf();
-      document.getElementById("balance").style.color = "white";
-    }).catch(function(e) {
-      console.log(e);
-      self.setStatus("Error getting balance; see log.");
-    });
-  },
+    var weiReward = +document.getElementById("weiReward").value;
+    var doer = document.getElementById("doer").value;
 
-  reward: function() {
-    var self = this;
+    this.updateTransactionStatus("Transaction in progress ... ");
 
-    var amount = parseInt(document.getElementById("amount").value);
-    var receiver = document.getElementById("receiver").value;
-
-    this.setStatus("Initiating transaction... (please wait)");
-
-    var organization;
-    Organization.deployed().then(function(instance) {
-      organization = instance;
-      return organization.reward(receiver, amount, {from: account});
-    }).then(function() {
-      self.setStatus("Transaction complete!");
-      self.refreshBalance();
-    }).catch(function(e) {
-      console.log(e);
-      self.setStatus("Error sending coin; see log.");
-    });
+    TaskMaster.deployed()
+      .then(function(taskMasterInstance) {
+        return taskMasterInstance.reward(doer, weiReward, {
+          from: ownerAccount
+        });
+      }).then(function() {
+        self.updateTransactionStatus("Transaction complete!");
+        self.refreshAccountBalance();
+      }).catch(function(e) {
+        console.log(e);
+        self.updateTransactionStatus("Error sending reward - see console.");
+      });
   }
 };
 
 window.addEventListener('load', function() {
-  // Checking if Web3 has been injected by the browser (Mist/MetaMask)
-  if (typeof web3 !== 'undefined') {
-    console.warn("Using web3 detected from external source. If you find that your accounts don't appear or you have 0 ether, ensure you've configured that source properly. If using MetaMask, see the following link. Feel free to delete this warning. :) http://truffleframework.com/tutorials/truffle-and-organizationmask")
-    // Use Mist/MetaMask's provider
-    window.web3 = new Web3(web3.currentProvider);
-  } else {
-    console.warn("No web3 detected. Falling back to http://127.0.0.1:9545. You should remove this fallback when you deploy live, as it's inherently insecure. Consider switching to Metamask for development. More info here: http://truffleframework.com/tutorials/truffle-and-organizationmask");
-    // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
-    window.web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:9545"));
-  }
-
-  App.start();
+  window.web3 = new Web3(new Web3.providers.HttpProvider("http://127.0.0.1:9545"));
+  console.log(TaskMaster)
+  TaskMasterApp.setWeb3Provider();
+  TaskMasterApp.getAccounts();
 });

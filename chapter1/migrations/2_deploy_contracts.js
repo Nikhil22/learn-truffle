@@ -1,5 +1,5 @@
-var Organization = artifacts.require("./Organization.sol");
+var TaskMaster = artifacts.require("./TaskMaster.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(Organization);
+  deployer.deploy(TaskMaster);
 };

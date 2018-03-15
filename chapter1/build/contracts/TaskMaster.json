@@ -1,5 +1,5 @@
 {
-  "contractName": "Organization",
+  "contractName": "TaskMaster",
   "abi": [
     {
       "constant": false,
@@ -83,17 +83,17 @@
       "type": "constructor"
     }
   ],
-  "bytecode": "0x6060604052341561000f57600080fd5b6127106000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208190555033600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506103b0806100a46000396000f300606060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806321670f221461006757806327e235e3146100c15780638da5cb5b1461010e578063f8b2cb4f14610163575b600080fd5b341561007257600080fd5b6100a7600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919080359060200190919050506101b0565b604051808215151515815260200191505060405180910390f35b34156100cc57600080fd5b6100f8600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506102fe565b6040518082815260200191505060405180910390f35b341561011957600080fd5b610121610316565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561016e57600080fd5b61019a600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190505061033c565b6040518082815260200191505060405180910390f35b6000600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561020e57600080fd5b81806000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020541015151561025c57600080fd5b826000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282540392505081905550826000808673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600082825401925050819055508191505092915050565b60006020528060005260406000206000915090505481565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60008060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205490509190505600a165627a7a72305820e5fbb5f925e94e7e41c4fc25e2322b87d7b2c7eb9ac455712786643bc06986d20029",
-  "deployedBytecode": "0x606060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806321670f221461006757806327e235e3146100c15780638da5cb5b1461010e578063f8b2cb4f14610163575b600080fd5b341561007257600080fd5b6100a7600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919080359060200190919050506101b0565b604051808215151515815260200191505060405180910390f35b34156100cc57600080fd5b6100f8600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506102fe565b6040518082815260200191505060405180910390f35b341561011957600080fd5b610121610316565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561016e57600080fd5b61019a600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190505061033c565b6040518082815260200191505060405180910390f35b6000600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561020e57600080fd5b81806000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020541015151561025c57600080fd5b826000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282540392505081905550826000808673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600082825401925050819055508191505092915050565b60006020528060005260406000206000915090505481565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60008060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205490509190505600a165627a7a72305820e5fbb5f925e94e7e41c4fc25e2322b87d7b2c7eb9ac455712786643bc06986d20029",
-  "sourceMap": "27:864:1:-;;;178:104;;;;;;;;242:5;219:8;:20;228:10;219:20;;;;;;;;;;;;;;;:28;;;;265:10;257:5;;:18;;;;;;;;;;;;;;;;;;27:864;;;;;;",
-  "deployedSourceMap": "27:864:1:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;288:290;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;55:41;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;126:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;584:98;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;288:290;427:20;739:5;;;;;;;;;;;725:19;;:10;:19;;;717:28;;;;;;;;397:12;858;834:8;:20;843:10;834:20;;;;;;;;;;;;;;;;:36;;826:45;;;;;;;;487:12;463:8;:20;472:10;463:20;;;;;;;;;;;;;;;;:36;;;;;;;;;;;527:12;509:8;:14;518:4;509:14;;;;;;;;;;;;;;;;:30;;;;;;;;;;;556:15;549:22;;755:1;288:290;;;;:::o;55:41::-;;;;;;;;;;;;;;;;;:::o;126:20::-;;;;;;;;;;;;;:::o;584:98::-;638:4;661:8;:14;670:4;661:14;;;;;;;;;;;;;;;;654:21;;584:98;;;:::o",
-  "source": "pragma solidity ^0.4.17;\n\n\ncontract Organization {\n    mapping (address => uint) public balances; // balances of everyone\n    address public owner; // owner of the contract\n\n    function Organization() public {\n        balances[msg.sender] = 10000;\n        owner = msg.sender;\n    }\n\n    function reward(address doer, uint rewardAmount)\n        public\n        isOwner()\n        hasSufficientFunds(rewardAmount)\n        returns(bool sufficientFunds)\n    {\n        balances[msg.sender] -= rewardAmount;\n        balances[doer] += rewardAmount;\n        return sufficientFunds;\n    }\n\n    function getBalance(address addr) public view returns(uint) {\n        return balances[addr];\n    }\n\n    modifier isOwner() {\n        require(msg.sender == owner);\n        _;\n    }\n\n    modifier hasSufficientFunds(uint rewardAmount) {\n        require(balances[msg.sender] >= rewardAmount);\n        _;\n    }\n}\n",
-  "sourcePath": "/Users/nikhilwins/Desktop/truffle-book/chapter1/contracts/Organization.sol",
+  "bytecode": "0x6060604052341561000f57600080fd5b6127106000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000208190555033600160006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055506103b0806100a46000396000f300606060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806321670f221461006757806327e235e3146100c15780638da5cb5b1461010e578063f8b2cb4f14610163575b600080fd5b341561007257600080fd5b6100a7600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919080359060200190919050506101b0565b604051808215151515815260200191505060405180910390f35b34156100cc57600080fd5b6100f8600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506102fe565b6040518082815260200191505060405180910390f35b341561011957600080fd5b610121610316565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561016e57600080fd5b61019a600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190505061033c565b6040518082815260200191505060405180910390f35b6000600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561020e57600080fd5b81806000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020541015151561025c57600080fd5b826000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282540392505081905550826000808673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600082825401925050819055508191505092915050565b60006020528060005260406000206000915090505481565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60008060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205490509190505600a165627a7a72305820e49337eff11aab8cfe3478ce2998d39cab9d1c30e90d31d30ecc7e5acfb0fb190029",
+  "deployedBytecode": "0x606060405260043610610062576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff16806321670f221461006757806327e235e3146100c15780638da5cb5b1461010e578063f8b2cb4f14610163575b600080fd5b341561007257600080fd5b6100a7600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919080359060200190919050506101b0565b604051808215151515815260200191505060405180910390f35b34156100cc57600080fd5b6100f8600480803573ffffffffffffffffffffffffffffffffffffffff169060200190919050506102fe565b6040518082815260200191505060405180910390f35b341561011957600080fd5b610121610316565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561016e57600080fd5b61019a600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190505061033c565b6040518082815260200191505060405180910390f35b6000600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff163373ffffffffffffffffffffffffffffffffffffffff1614151561020e57600080fd5b81806000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020541015151561025c57600080fd5b826000803373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200190815260200160002060008282540392505081905550826000808673ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff168152602001908152602001600020600082825401925050819055508191505092915050565b60006020528060005260406000206000915090505481565b600160009054906101000a900473ffffffffffffffffffffffffffffffffffffffff1681565b60008060008373ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff1681526020019081526020016000205490509190505600a165627a7a72305820e49337eff11aab8cfe3478ce2998d39cab9d1c30e90d31d30ecc7e5acfb0fb190029",
+  "sourceMap": "27:860:1:-;;;176:102;;;;;;;;238:5;215:8;:20;224:10;215:20;;;;;;;;;;;;;;;:28;;;;261:10;253:5;;:18;;;;;;;;;;;;;;;;;;27:860;;;;;;",
+  "deployedSourceMap": "27:860:1:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;284:290;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;53:41;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;124:20;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;580:98;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;284:290;423:20;735:5;;;;;;;;;;;721:19;;:10;:19;;;713:28;;;;;;;;393:12;854;830:8;:20;839:10;830:20;;;;;;;;;;;;;;;;:36;;822:45;;;;;;;;483:12;459:8;:20;468:10;459:20;;;;;;;;;;;;;;;;:36;;;;;;;;;;;523:12;505:8;:14;514:4;505:14;;;;;;;;;;;;;;;;:30;;;;;;;;;;;552:15;545:22;;751:1;284:290;;;;:::o;53:41::-;;;;;;;;;;;;;;;;;:::o;124:20::-;;;;;;;;;;;;;:::o;580:98::-;634:4;657:8;:14;666:4;657:14;;;;;;;;;;;;;;;;650:21;;580:98;;;:::o",
+  "source": "pragma solidity ^0.4.17;\n\n\ncontract TaskMaster {\n    mapping (address => uint) public balances; // balances of everyone\n    address public owner; // owner of the contract\n\n    function TaskMaster() public {\n        balances[msg.sender] = 10000;\n        owner = msg.sender;\n    }\n\n    function reward(address doer, uint rewardAmount)\n        public\n        isOwner()\n        hasSufficientFunds(rewardAmount)\n        returns(bool sufficientFunds)\n    {\n        balances[msg.sender] -= rewardAmount;\n        balances[doer] += rewardAmount;\n        return sufficientFunds;\n    }\n\n    function getBalance(address addr) public view returns(uint) {\n        return balances[addr];\n    }\n\n    modifier isOwner() {\n        require(msg.sender == owner);\n        _;\n    }\n\n    modifier hasSufficientFunds(uint rewardAmount) {\n        require(balances[msg.sender] >= rewardAmount);\n        _;\n    }\n}\n",
+  "sourcePath": "/Users/nikhilwins/Desktop/truffle-book/chapter1/contracts/TaskMaster.sol",
   "ast": {
     "attributes": {
-      "absolutePath": "/Users/nikhilwins/Desktop/truffle-book/chapter1/contracts/Organization.sol",
+      "absolutePath": "/Users/nikhilwins/Desktop/truffle-book/chapter1/contracts/TaskMaster.sol",
       "exportedSymbols": {
-        "Organization": [
+        "TaskMaster": [
           149
         ]
       }
@@ -126,7 +126,7 @@
           "linearizedBaseContracts": [
             149
           ],
-          "name": "Organization",
+          "name": "TaskMaster",
           "scope": 150
         },
         "children": [
@@ -154,7 +154,7 @@
                     },
                     "id": 59,
                     "name": "ElementaryTypeName",
-                    "src": "64:7:1"
+                    "src": "62:7:1"
                   },
                   {
                     "attributes": {
@@ -163,17 +163,17 @@
                     },
                     "id": 60,
                     "name": "ElementaryTypeName",
-                    "src": "75:4:1"
+                    "src": "73:4:1"
                   }
                 ],
                 "id": 61,
                 "name": "Mapping",
-                "src": "55:25:1"
+                "src": "53:25:1"
               }
             ],
             "id": 62,
             "name": "VariableDeclaration",
-            "src": "55:41:1"
+            "src": "53:41:1"
           },
           {
             "attributes": {
@@ -194,12 +194,12 @@
                 },
                 "id": 63,
                 "name": "ElementaryTypeName",
-                "src": "126:7:1"
+                "src": "124:7:1"
               }
             ],
             "id": 64,
             "name": "VariableDeclaration",
-            "src": "126:20:1"
+            "src": "124:20:1"
           },
           {
             "attributes": {
@@ -209,7 +209,7 @@
               "modifiers": [
                 null
               ],
-              "name": "Organization",
+              "name": "TaskMaster",
               "payable": false,
               "scope": 149,
               "stateMutability": "nonpayable",
@@ -226,7 +226,7 @@
                 "children": [],
                 "id": 65,
                 "name": "ParameterList",
-                "src": "199:2:1"
+                "src": "195:2:1"
               },
               {
                 "attributes": {
@@ -237,7 +237,7 @@
                 "children": [],
                 "id": 66,
                 "name": "ParameterList",
-                "src": "209:0:1"
+                "src": "205:0:1"
               },
               {
                 "children": [
@@ -276,7 +276,7 @@
                                 },
                                 "id": 67,
                                 "name": "Identifier",
-                                "src": "219:8:1"
+                                "src": "215:8:1"
                               },
                               {
                                 "attributes": {
@@ -302,17 +302,17 @@
                                     },
                                     "id": 68,
                                     "name": "Identifier",
-                                    "src": "228:3:1"
+                                    "src": "224:3:1"
                                   }
                                 ],
                                 "id": 69,
                                 "name": "MemberAccess",
-                                "src": "228:10:1"
+                                "src": "224:10:1"
                               }
                             ],
                             "id": 70,
                             "name": "IndexAccess",
-                            "src": "219:20:1"
+                            "src": "215:20:1"
                           },
                           {
                             "attributes": {
@@ -329,17 +329,17 @@
                             },
                             "id": 71,
                             "name": "Literal",
-                            "src": "242:5:1"
+                            "src": "238:5:1"
                           }
                         ],
                         "id": 72,
                         "name": "Assignment",
-                        "src": "219:28:1"
+                        "src": "215:28:1"
                       }
                     ],
                     "id": 73,
                     "name": "ExpressionStatement",
-                    "src": "219:28:1"
+                    "src": "215:28:1"
                   },
                   {
                     "children": [
@@ -366,7 +366,7 @@
                             },
                             "id": 74,
                             "name": "Identifier",
-                            "src": "257:5:1"
+                            "src": "253:5:1"
                           },
                           {
                             "attributes": {
@@ -392,32 +392,32 @@
                                 },
                                 "id": 75,
                                 "name": "Identifier",
-                                "src": "265:3:1"
+                                "src": "261:3:1"
                               }
                             ],
                             "id": 76,
                             "name": "MemberAccess",
-                            "src": "265:10:1"
+                            "src": "261:10:1"
                           }
                         ],
                         "id": 77,
                         "name": "Assignment",
-                        "src": "257:18:1"
+                        "src": "253:18:1"
                       }
                     ],
                     "id": 78,
                     "name": "ExpressionStatement",
-                    "src": "257:18:1"
+                    "src": "253:18:1"
                   }
                 ],
                 "id": 79,
                 "name": "Block",
-                "src": "209:73:1"
+                "src": "205:73:1"
               }
             ],
             "id": 80,
             "name": "FunctionDefinition",
-            "src": "178:104:1"
+            "src": "176:102:1"
           },
           {
             "attributes": {
@@ -453,12 +453,12 @@
                         },
                         "id": 81,
                         "name": "ElementaryTypeName",
-                        "src": "304:7:1"
+                        "src": "300:7:1"
                       }
                     ],
                     "id": 82,
                     "name": "VariableDeclaration",
-                    "src": "304:12:1"
+                    "src": "300:12:1"
                   },
                   {
                     "attributes": {
@@ -479,17 +479,17 @@
                         },
                         "id": 83,
                         "name": "ElementaryTypeName",
-                        "src": "318:4:1"
+                        "src": "314:4:1"
                       }
                     ],
                     "id": 84,
                     "name": "VariableDeclaration",
-                    "src": "318:17:1"
+                    "src": "314:17:1"
                   }
                 ],
                 "id": 85,
                 "name": "ParameterList",
-                "src": "303:33:1"
+                "src": "299:33:1"
               },
               {
                 "children": [
@@ -512,17 +512,17 @@
                         },
                         "id": 91,
                         "name": "ElementaryTypeName",
-                        "src": "427:4:1"
+                        "src": "423:4:1"
                       }
                     ],
                     "id": 92,
                     "name": "VariableDeclaration",
-                    "src": "427:20:1"
+                    "src": "423:20:1"
                   }
                 ],
                 "id": 93,
                 "name": "ParameterList",
-                "src": "426:22:1"
+                "src": "422:22:1"
               },
               {
                 "attributes": {
@@ -543,12 +543,12 @@
                     },
                     "id": 86,
                     "name": "Identifier",
-                    "src": "360:7:1"
+                    "src": "356:7:1"
                   }
                 ],
                 "id": 87,
                 "name": "ModifierInvocation",
-                "src": "360:9:1"
+                "src": "356:9:1"
               },
               {
                 "children": [
@@ -564,7 +564,7 @@
                     },
                     "id": 88,
                     "name": "Identifier",
-                    "src": "378:18:1"
+                    "src": "374:18:1"
                   },
                   {
                     "attributes": {
@@ -578,12 +578,12 @@
                     },
                     "id": 89,
                     "name": "Identifier",
-                    "src": "397:12:1"
+                    "src": "393:12:1"
                   }
                 ],
                 "id": 90,
                 "name": "ModifierInvocation",
-                "src": "378:32:1"
+                "src": "374:32:1"
               },
               {
                 "children": [
@@ -622,7 +622,7 @@
                                 },
                                 "id": 94,
                                 "name": "Identifier",
-                                "src": "463:8:1"
+                                "src": "459:8:1"
                               },
                               {
                                 "attributes": {
@@ -648,17 +648,17 @@
                                     },
                                     "id": 95,
                                     "name": "Identifier",
-                                    "src": "472:3:1"
+                                    "src": "468:3:1"
                                   }
                                 ],
                                 "id": 96,
                                 "name": "MemberAccess",
-                                "src": "472:10:1"
+                                "src": "468:10:1"
                               }
                             ],
                             "id": 97,
                             "name": "IndexAccess",
-                            "src": "463:20:1"
+                            "src": "459:20:1"
                           },
                           {
                             "attributes": {
@@ -672,17 +672,17 @@
                             },
                             "id": 98,
                             "name": "Identifier",
-                            "src": "487:12:1"
+                            "src": "483:12:1"
                           }
                         ],
                         "id": 99,
                         "name": "Assignment",
-                        "src": "463:36:1"
+                        "src": "459:36:1"
                       }
                     ],
                     "id": 100,
                     "name": "ExpressionStatement",
-                    "src": "463:36:1"
+                    "src": "459:36:1"
                   },
                   {
                     "children": [
@@ -719,7 +719,7 @@
                                 },
                                 "id": 101,
                                 "name": "Identifier",
-                                "src": "509:8:1"
+                                "src": "505:8:1"
                               },
                               {
                                 "attributes": {
@@ -733,12 +733,12 @@
                                 },
                                 "id": 102,
                                 "name": "Identifier",
-                                "src": "518:4:1"
+                                "src": "514:4:1"
                               }
                             ],
                             "id": 103,
                             "name": "IndexAccess",
-                            "src": "509:14:1"
+                            "src": "505:14:1"
                           },
                           {
                             "attributes": {
@@ -752,17 +752,17 @@
                             },
                             "id": 104,
                             "name": "Identifier",
-                            "src": "527:12:1"
+                            "src": "523:12:1"
                           }
                         ],
                         "id": 105,
                         "name": "Assignment",
-                        "src": "509:30:1"
+                        "src": "505:30:1"
                       }
                     ],
                     "id": 106,
                     "name": "ExpressionStatement",
-                    "src": "509:30:1"
+                    "src": "505:30:1"
                   },
                   {
                     "attributes": {
@@ -781,22 +781,22 @@
                         },
                         "id": 107,
                         "name": "Identifier",
-                        "src": "556:15:1"
+                        "src": "552:15:1"
                       }
                     ],
                     "id": 108,
                     "name": "Return",
-                    "src": "549:22:1"
+                    "src": "545:22:1"
                   }
                 ],
                 "id": 109,
                 "name": "Block",
-                "src": "453:125:1"
+                "src": "449:125:1"
               }
             ],
             "id": 110,
             "name": "FunctionDefinition",
-            "src": "288:290:1"
+            "src": "284:290:1"
           },
           {
             "attributes": {
@@ -835,17 +835,17 @@
                         },
                         "id": 111,
                         "name": "ElementaryTypeName",
-                        "src": "604:7:1"
+                        "src": "600:7:1"
                       }
                     ],
                     "id": 112,
                     "name": "VariableDeclaration",
-                    "src": "604:12:1"
+                    "src": "600:12:1"
                   }
                 ],
                 "id": 113,
                 "name": "ParameterList",
-                "src": "603:14:1"
+                "src": "599:14:1"
               },
               {
                 "children": [
@@ -868,17 +868,17 @@
                         },
                         "id": 114,
                         "name": "ElementaryTypeName",
-                        "src": "638:4:1"
+                        "src": "634:4:1"
                       }
                     ],
                     "id": 115,
                     "name": "VariableDeclaration",
-                    "src": "638:4:1"
+                    "src": "634:4:1"
                   }
                 ],
                 "id": 116,
                 "name": "ParameterList",
-                "src": "637:6:1"
+                "src": "633:6:1"
               },
               {
                 "children": [
@@ -909,7 +909,7 @@
                             },
                             "id": 117,
                             "name": "Identifier",
-                            "src": "661:8:1"
+                            "src": "657:8:1"
                           },
                           {
                             "attributes": {
@@ -923,27 +923,27 @@
                             },
                             "id": 118,
                             "name": "Identifier",
-                            "src": "670:4:1"
+                            "src": "666:4:1"
                           }
                         ],
                         "id": 119,
                         "name": "IndexAccess",
-                        "src": "661:14:1"
+                        "src": "657:14:1"
                       }
                     ],
                     "id": 120,
                     "name": "Return",
-                    "src": "654:21:1"
+                    "src": "650:21:1"
                   }
                 ],
                 "id": 121,
                 "name": "Block",
-                "src": "644:38:1"
+                "src": "640:38:1"
               }
             ],
             "id": 122,
             "name": "FunctionDefinition",
-            "src": "584:98:1"
+            "src": "580:98:1"
           },
           {
             "attributes": {
@@ -960,7 +960,7 @@
                 "children": [],
                 "id": 123,
                 "name": "ParameterList",
-                "src": "704:2:1"
+                "src": "700:2:1"
               },
               {
                 "children": [
@@ -998,7 +998,7 @@
                             },
                             "id": 124,
                             "name": "Identifier",
-                            "src": "717:7:1"
+                            "src": "713:7:1"
                           },
                           {
                             "attributes": {
@@ -1039,12 +1039,12 @@
                                     },
                                     "id": 125,
                                     "name": "Identifier",
-                                    "src": "725:3:1"
+                                    "src": "721:3:1"
                                   }
                                 ],
                                 "id": 126,
                                 "name": "MemberAccess",
-                                "src": "725:10:1"
+                                "src": "721:10:1"
                               },
                               {
                                 "attributes": {
@@ -1058,37 +1058,37 @@
                                 },
                                 "id": 127,
                                 "name": "Identifier",
-                                "src": "739:5:1"
+                                "src": "735:5:1"
                               }
                             ],
                             "id": 128,
                             "name": "BinaryOperation",
-                            "src": "725:19:1"
+                            "src": "721:19:1"
                           }
                         ],
                         "id": 129,
                         "name": "FunctionCall",
-                        "src": "717:28:1"
+                        "src": "713:28:1"
                       }
                     ],
                     "id": 130,
                     "name": "ExpressionStatement",
-                    "src": "717:28:1"
+                    "src": "713:28:1"
                   },
                   {
                     "id": 131,
                     "name": "PlaceholderStatement",
-                    "src": "755:1:1"
+                    "src": "751:1:1"
                   }
                 ],
                 "id": 132,
                 "name": "Block",
-                "src": "707:56:1"
+                "src": "703:56:1"
               }
             ],
             "id": 133,
             "name": "ModifierDefinition",
-            "src": "688:75:1"
+            "src": "684:75:1"
           },
           {
             "attributes": {
@@ -1117,17 +1117,17 @@
                         },
                         "id": 134,
                         "name": "ElementaryTypeName",
-                        "src": "797:4:1"
+                        "src": "793:4:1"
                       }
                     ],
                     "id": 135,
                     "name": "VariableDeclaration",
-                    "src": "797:17:1"
+                    "src": "793:17:1"
                   }
                 ],
                 "id": 136,
                 "name": "ParameterList",
-                "src": "796:19:1"
+                "src": "792:19:1"
               },
               {
                 "children": [
@@ -1165,7 +1165,7 @@
                             },
                             "id": 137,
                             "name": "Identifier",
-                            "src": "826:7:1"
+                            "src": "822:7:1"
                           },
                           {
                             "attributes": {
@@ -1204,7 +1204,7 @@
                                     },
                                     "id": 138,
                                     "name": "Identifier",
-                                    "src": "834:8:1"
+                                    "src": "830:8:1"
                                   },
                                   {
                                     "attributes": {
@@ -1230,17 +1230,17 @@
                                         },
                                         "id": 139,
                                         "name": "Identifier",
-                                        "src": "843:3:1"
+                                        "src": "839:3:1"
                                       }
                                     ],
                                     "id": 140,
                                     "name": "MemberAccess",
-                                    "src": "843:10:1"
+                                    "src": "839:10:1"
                                   }
                                 ],
                                 "id": 141,
                                 "name": "IndexAccess",
-                                "src": "834:20:1"
+                                "src": "830:20:1"
                               },
                               {
                                 "attributes": {
@@ -1254,47 +1254,47 @@
                                 },
                                 "id": 142,
                                 "name": "Identifier",
-                                "src": "858:12:1"
+                                "src": "854:12:1"
                               }
                             ],
                             "id": 143,
                             "name": "BinaryOperation",
-                            "src": "834:36:1"
+                            "src": "830:36:1"
                           }
                         ],
                         "id": 144,
                         "name": "FunctionCall",
-                        "src": "826:45:1"
+                        "src": "822:45:1"
                       }
                     ],
                     "id": 145,
                     "name": "ExpressionStatement",
-                    "src": "826:45:1"
+                    "src": "822:45:1"
                   },
                   {
                     "id": 146,
                     "name": "PlaceholderStatement",
-                    "src": "881:1:1"
+                    "src": "877:1:1"
                   }
                 ],
                 "id": 147,
                 "name": "Block",
-                "src": "816:73:1"
+                "src": "812:73:1"
               }
             ],
             "id": 148,
             "name": "ModifierDefinition",
-            "src": "769:120:1"
+            "src": "765:120:1"
           }
         ],
         "id": 149,
         "name": "ContractDefinition",
-        "src": "27:864:1"
+        "src": "27:860:1"
       }
     ],
     "id": 150,
     "name": "SourceUnit",
-    "src": "0:892:1"
+    "src": "0:888:1"
   },
   "compiler": {
     "name": "solc",
@@ -1308,5 +1308,5 @@
     }
   },
   "schemaVersion": "1.0.1",
-  "updatedAt": "2018-03-08T16:51:43.817Z"
+  "updatedAt": "2018-03-15T09:50:20.164Z"
 }
