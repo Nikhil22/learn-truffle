@@ -18,6 +18,8 @@ This repository contains all code, grouped by chapter, for the book of the above
 5. `npm run dev`
 6. Navigate to `http://localhost:8080/#/`
 
+*Note: Steps 3-7 can be skipped if the chosen chapter is not a Truffle project (i.e does not have a `truffle.js` file, etc)*
+
 ## Technologies Used
 - Truffle
 - JavaScript (Angular, React, Vue, Node)
