@@ -1,4 +1,4 @@
-oconst Web3 = require('web3');
+const Web3 = require('web3');
 const contract = require('truffle-contract');
 const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 const SimpleStorageContract = require('./build/contracts/SimpleStorage.json');
