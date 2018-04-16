@@ -5,6 +5,8 @@ contract TaskMaster {
     mapping (address => uint) public balances; // balances of everyone
     address public owner; // owner of the contract
 
+    event LogRecipientRewarded(address recipient, uint rewardAmount);
+
     function TaskMaster() public {
         balances[msg.sender] = 10000;
         owner = msg.sender;
@@ -18,6 +20,7 @@ contract TaskMaster {
     {
         balances[msg.sender] -= rewardAmount;
         balances[doer] += rewardAmount;
+        LogRecipientRewarded(doer, rewardAmount);
         return sufficientFunds;
     }
 
