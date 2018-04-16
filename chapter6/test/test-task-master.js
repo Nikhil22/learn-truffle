@@ -47,6 +47,19 @@ contract('TaskMaster', accounts => {
             LOG_RECIPIENT_REWARD,
             `${LOG_RECIPIENT_REWARD} was not not thrown!`
           );
+
+          const recipientFromLog = recipientRewardedLog.args.recipient;
+          const rewardAmountFromLog = recipientRewardedLog.args.rewardAmount.toNumber();
+          assert.strictEqual(
+            recipientFromLog,
+            recipient,
+            `Recipient should be ${recipient}`
+          );
+          assert.strictEqual(
+            rewardAmountFromLog,
+            REWARD_WEI,
+            `Reward amount should be ${REWARD_WEI}`
+          );
           return instance.getBalance.call(owner, { from: owner } );
       })
       .then(actualOwnerBalance => {
