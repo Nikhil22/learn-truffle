@@ -1,5 +1,5 @@
 const TaskMaster = artifacts.require('../contracts/TaskMaster.sol');
-const expectedExceptionPromise = require('../util/expected-exception.js');
+const expectedExceptionPromise = require('../util/expected-exception-promise.js');
 
 contract('TaskMaster', accounts => {
 
